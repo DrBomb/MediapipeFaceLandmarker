@@ -71,7 +71,9 @@ if __name__ == "__main__":
     
     # FaceLandmarker callback function
     def onDetect(DetectionResult, Image, Cnf):
+        global frame_start
         frame_delta = time.perf_counter() - frame_start
+        frame_start = time.perf_counter()
         # print(DetectionResult)
         face_points = DetectionResult.face_landmarks
         face_blendshapes = DetectionResult.face_blendshapes
@@ -104,11 +106,7 @@ if __name__ == "__main__":
     
     print(f"Starting MediapipeFaceLandmarker on {args.host}:{args.port}")
     with FaceLandmarker.create_from_options(options) as landmarker:
-        # Store frame start times
-        frame_start = None
         while True:
-            # Frame start time
-            frame_start = time.perf_counter()
             # Capture frame
             ret, frame = camera.read()
             if not ret:
